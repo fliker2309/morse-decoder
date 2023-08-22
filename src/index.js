@@ -38,7 +38,27 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+   let morseArr = expr.split("")
+
+    while (morseArr[0]==="0") morseArr.shift()
+    while(morseArr[morseArr.length-1] === "0") morseArr.pop()
+
+    let stringExpr = morseArr.join('')
+
+    if (stringExpr.indexOf('0') <0) return '.'
+
+    for (let i = 1; ; i++){
+        if(stringExpr.indexOf(`1${"0".repeat(i)}1`) >= 0 ||
+            stringExpr.indexOf(`${"1".repeat(i+i)}`) <0) {
+            stringExpr = stringExpr.replace(new RegExp(`0(${i)}`,'g'),'0')
+                .replace(newRegExp(`1{${i}}`, 'g'), '1')
+            break
+        }
+    }
+
+
+
+
 }
 
 module.exports = {
