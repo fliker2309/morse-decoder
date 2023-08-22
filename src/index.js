@@ -38,29 +38,41 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-   let morseArr = expr.split("")
-
-    while (morseArr[0]==="0") morseArr.shift()
-    while(morseArr[morseArr.length-1] === "0") morseArr.pop()
-
-    let stringExpr = morseArr.join('')
-
-    if (stringExpr.indexOf('0') <0) return '.'
-
-    for (let i = 1; ; i++){
-        if(stringExpr.indexOf(`1${"0".repeat(i)}1`) >= 0 ||
-            stringExpr.indexOf(`${"1".repeat(i+i)}`) <0) {
-            stringExpr = stringExpr.replace(new RegExp(`0(${i)}`,'g'),'0')
-                .replace(newRegExp(`1{${i}}`, 'g'), '1')
-            break
-        }
-    }
-
-
-
-
+    return expr
+        .split("**********")
+        .reduce(
+            (phrase, wordBin) =>
+                phrase +
+                " " +
+                wordBin
+                    .split("")
+                    .reduce(
+                        (wordStr, num, i) => wordStr + ((i - 9) % 10 ? num : num + "|"),
+                        ""
+                    )
+                    .slice(0, -1)
+                    .split("|")
+                    .map((el) =>
+                        parseInt(el)
+                            .toString()
+                            .split("")
+                            .reduce((a, b, index) => a + (index % 2 ? b + "|" : b), "")
+                            .trim()
+                            .split("|")
+                            .reduce(
+                                (a, b) => a + (b === "10" ? "." : b === "11" ? "-" : ""),
+                                ""
+                            )
+                            .split(",")
+                            .map((el) => MORSE_TABLE[el])
+                            .join("")
+                    )
+                    .join(""),
+            ""
+        )
+        .trim();
 }
 
 module.exports = {
-    decode
-}
+    decode,
+};
